@@ -124,6 +124,7 @@ async function updateEmployeeRole() {
     }
 };
 
+// Present user with options
 async function askForNextAction() {
     try {
         const answers = await inquirer.prompt([
@@ -157,8 +158,6 @@ async function askForNextAction() {
 }
 
 askForNextAction();
-
-// Present user with options: What would you like to do? (View All Employees, View All Employees By Department, View All Employees By Manager, Add Employee...)
 
 // View all departments - READ - "SELECT * FROM [table_name];" (You'll need to do more than this, but start here and make it work)
 
