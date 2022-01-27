@@ -1,0 +1,1 @@
+-- SQL queries for creating database and updating it etc
