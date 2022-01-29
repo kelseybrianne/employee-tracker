@@ -4,8 +4,10 @@ const db = require('./db/connection')
 
 
 
-const viewDepartments = () => {
-    console.log('Departments');
+async function viewDepartments() {
+    // Select so user sees role id, job title, department the role belongs to, and salary for that role
+    const departments = await db.query('SELECT * FROM departments');
+    console.table(departments);
     askForNextAction();
 };
 
