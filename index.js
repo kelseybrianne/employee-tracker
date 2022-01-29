@@ -1,4 +1,8 @@
 const inquirer = require("inquirer");
+const mysql = require('mysql2');
+const db = require('./db/connection')
+
+
 
 const viewDepartments = () => {
     console.log('Departments');
@@ -10,7 +14,9 @@ const viewRoles = () => {
     askForNextAction();
 };
 
-const viewEmployees = () => {
+async function viewEmployees() {
+
+    const employees = await db.query('SELECT * FROM employees');
     console.log('Employees ');
     askForNextAction();
 };
@@ -35,7 +41,29 @@ async function addDepartment() {
     }
 };
 
+// Add a role
 async function addRole() {
+    // SELECT the existing roles out of the 'roles' table
+    const departments = [
+        {
+            id: 1,
+            name: 'Sales'
+        },
+        {
+            id: 2,
+            name: 'Accounting'
+        }
+    ]
+    // .map() the results from 'roles' to question data for inquirer
+    const choices = departments.map(department => {
+        return {
+            name: department.name,
+            value: department.id
+        }
+    })
+
+    // THEN prompt the user for role information
+
     try {
         const answers = await inquirer.prompt([
             {
@@ -52,12 +80,12 @@ async function addRole() {
                 name: 'department',
                 message: "Department:",
                 type: 'list',
-                choices: ['1', '2', '3']
+                choices: choices
             }
         ])
-        console.log('Role added');
+        // Take the user's answers and go INSERT them into the 'role' table
+        console.log(answers);
         const {title, salary, department} = answers;
-        // Add new role info to database
 
         askForNextAction();
     }
@@ -167,14 +195,6 @@ askForNextAction();
 
 
 // Add a department - CREATE - "INSERT INTO [table_name] (col1, col2) VALUES (value1, value2);"
-
-// Add a role
-    // SELECT the existing roles out of the 'roles' table
-
-    // .map() the results from 'roles' to question data for inquirer
-
-    // THEN prompt the user for role information
-        // Take the user's answers and go INSERT them into the 'role' table
 
 // Add an employee
 
