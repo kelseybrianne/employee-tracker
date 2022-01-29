@@ -15,9 +15,9 @@ const viewRoles = () => {
 };
 
 async function viewEmployees() {
-
+    // Select so user sees id, first name, last name, job title, department, salary, and manager of that employee
     const employees = await db.query('SELECT * FROM employees');
-    console.log('Employees ');
+    console.table(employees);
     askForNextAction();
 };
 
@@ -44,6 +44,8 @@ async function addDepartment() {
 // Add a role
 async function addRole() {
     // SELECT the existing roles out of the 'roles' table
+    const roles = await db.query('SELECT * FROM roles');
+
     const departments = [
         {
             id: 1,
@@ -63,7 +65,6 @@ async function addRole() {
     })
 
     // THEN prompt the user for role information
-
     try {
         const answers = await inquirer.prompt([
             {
