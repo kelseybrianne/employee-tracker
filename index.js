@@ -9,8 +9,10 @@ const viewDepartments = () => {
     askForNextAction();
 };
 
-const viewRoles = () => {
-    console.log('Roles');
+async function viewRoles() {
+    // Select so user sees role id, job title, department the role belongs to, and salary for that role
+    const roles = await db.query('SELECT * FROM roles');
+    console.table(roles);
     askForNextAction();
 };
 
