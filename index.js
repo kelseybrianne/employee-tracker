@@ -16,9 +16,10 @@ async function viewRoles() {
     askForNextAction();
 };
 
+// !!!!Still need to show manager!!!!
 async function viewEmployees() {
     // Select so user sees id, first name, last name, job title, department, salary, and manager of that employee
-    const employees = await db.query('SELECT * FROM employees');
+    const employees = await db.query('SELECT employees.id, CONCAT(employees.first_name," ",employees.last_name) AS name, title AS job_title, salary, name AS department, CONCAT(manager.first_name," ",manager.last_name) AS manager FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments ON roles.department_id = departments.id JOIN employees manager ON manager.id = employees.manager_id');
     console.table(employees);
     askForNextAction();
 };
