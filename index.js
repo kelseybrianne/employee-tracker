@@ -29,15 +29,15 @@ async function addDepartment() {
     try {
         const answers = await inquirer.prompt([
             {
-                name: 'newDepartment',
+                name: 'name',
                 message: "Department name:",
                 type: 'input'
             }
         ])
-        console.log('Department added');
-        const {newDepartment} = answers;
+        const {name} = answers;
         // Add newDepartment to database
-
+        db.query('INSERT INTO departments (name) VALUES (?)', [name])
+        console.log(answers);
         askForNextAction();
     }
     catch(err) {
@@ -50,16 +50,6 @@ async function addRole() {
     // SELECT the existing roles out of the 'roles' table
     const departments = await db.query('SELECT * FROM departments');
 
-    // const departments = [
-    //     {
-    //         id: 1,
-    //         name: 'Sales'
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Accounting'
-    //     }
-    // ]
     // .map() the results from 'roles' to question data for inquirer
     const choices = departments.map(department => {
         return {
@@ -88,12 +78,11 @@ async function addRole() {
                 choices: choices
             }
         ])
-        // Take the user's answers and go INSERT them into the 'role' table
 
+        // Take the user's answers and go INSERT them into the 'role' table
         const {title, salary, department_id} = answers;
         db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [title, salary, department_id])
         console.log(answers);
-
         askForNextAction();
     }
     catch(err) {
@@ -193,12 +182,6 @@ async function askForNextAction() {
 }
 
 askForNextAction();
-
-// View all departments - READ - "SELECT * FROM [table_name];" (You'll need to do more than this, but start here and make it work)
-
-// View all roles - READ - "SELECT * FROM [table_name];"
-
-// View all employees - READ - "SELECT * FROM [table_name];"
 
 
 // Add a department - CREATE - "INSERT INTO [table_name] (col1, col2) VALUES (value1, value2);"
