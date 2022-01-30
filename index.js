@@ -91,35 +91,54 @@ async function addRole() {
 };
 
 async function addEmployee() {
+    const roles = await db.query('SELECT * FROM roles');
+
+    const employees = await db.query('SELECT * FROM employees');
+
+    // .map() the results from 'roles' and 'employees' to provide choices in inquirer prompts
+    const roleChoices = roles.map(role => {
+        return {
+            name: role.title,
+            value: role.id
+        }
+    })
+    const employeeChoices = employees.map(employee => {
+        return {
+            name: employee.first_name,
+            value: employee.id
+        }
+    })
+
     try {
         const answers = await inquirer.prompt([
             {
-                name: 'firstName',
+                name: 'first_name',
                 message: "First name:",
                 type: 'input'
             },
             {
-                name: 'lastName',
+                name: 'last_name',
                 message: "Last name:",
                 type: 'input'
             },
             {
-                name: 'role',
+                name: 'role_id',
                 message: "Role",
                 type: 'list',
-                choices: ['1', '2', '3']
+                choices: roleChoices
             },
             {
-                name: 'manager',
+                name: 'manager_id',
                 message: "Manager for new employee:",
                 type: 'list',
-                choices: ['1', '2', '3']
+                choices: employeeChoices
             }
         ])
-        console.log('Employee added');
-        const {title, salary, department} = answers;
+        const {first_name, last_name, role_id, manager_id} = answers;
+        
         // Add employee info to database
-
+        db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [first_name, last_name, role_id, manager_id])
+        console.log(answers);
         askForNextAction();
     }
     catch(err) {
@@ -182,9 +201,6 @@ async function askForNextAction() {
 }
 
 askForNextAction();
-
-
-// Add a department - CREATE - "INSERT INTO [table_name] (col1, col2) VALUES (value1, value2);"
 
 // Add an employee
 
