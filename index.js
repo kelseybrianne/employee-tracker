@@ -135,7 +135,7 @@ async function addEmployee() {
             }
         ])
         const {first_name, last_name, role_id, manager_id} = answers;
-        
+
         // Add employee info to database
         db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [first_name, last_name, role_id, manager_id])
         console.log(answers);
@@ -147,18 +147,41 @@ async function addEmployee() {
 };
 
 async function updateEmployeeRole() {
+    const roles = await db.query('SELECT * FROM roles');
+    const employees = await db.query('SELECT * FROM employees');
+
+    // .map() the results from 'roles' and 'employees' to provide choices in inquirer prompts
+    const roleChoices = roles.map(role => {
+        return {
+            name: role.title,
+            value: role.id
+        }
+    })
+    const employeeChoices = employees.map(employee => {
+        return {
+            name: employee.first_name,
+            value: employee.id
+        }
+    })
     try {
         const answers = await inquirer.prompt([
             {
-                name: 'employee',
+                name: 'employee_id',
                 message: "Select employee to update:",
                 type: 'list',
-                choices: ['1', '2', '3']
+                choices: employeeChoices
+            },
+            {
+                name: 'role_id',
+                message: "Select new role for employee:",
+                type: 'list',
+                choices: roleChoices
             }
         ])
-        console.log('Employee role updated');
-        const {employee} = answers;
+        console.log(answers);
+        const {employee_id, role_id} = answers;
         // Update employee role in database
+        db.query('UPDATE employees SET role_id = ? WHERE id = ?', [role_id, employee_id])
 
         askForNextAction();
     }
@@ -201,7 +224,3 @@ async function askForNextAction() {
 }
 
 askForNextAction();
-
-// Add an employee
-
-// Update an employee
