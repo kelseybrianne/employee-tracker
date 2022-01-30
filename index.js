@@ -48,18 +48,18 @@ async function addDepartment() {
 // Add a role
 async function addRole() {
     // SELECT the existing roles out of the 'roles' table
-    const roles = await db.query('SELECT * FROM roles');
+    const departments = await db.query('SELECT * FROM departments');
 
-    const departments = [
-        {
-            id: 1,
-            name: 'Sales'
-        },
-        {
-            id: 2,
-            name: 'Accounting'
-        }
-    ]
+    // const departments = [
+    //     {
+    //         id: 1,
+    //         name: 'Sales'
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Accounting'
+    //     }
+    // ]
     // .map() the results from 'roles' to question data for inquirer
     const choices = departments.map(department => {
         return {
@@ -82,15 +82,17 @@ async function addRole() {
                 type: 'input'
             },
             {
-                name: 'department',
+                name: 'department_id',
                 message: "Department:",
                 type: 'list',
                 choices: choices
             }
         ])
         // Take the user's answers and go INSERT them into the 'role' table
+
+        const {title, salary, department_id} = answers;
+        db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [title, salary, department_id])
         console.log(answers);
-        const {title, salary, department} = answers;
 
         askForNextAction();
     }
