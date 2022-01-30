@@ -2,18 +2,16 @@ const inquirer = require("inquirer");
 const mysql = require('mysql2');
 const db = require('./db/connection')
 
-
-
 async function viewDepartments() {
     // Select so user sees role id, job title, department the role belongs to, and salary for that role
-    const departments = await db.query('SELECT * FROM departments');
+    const departments = await db.query('SELECT id, name FROM departments');
     console.table(departments);
     askForNextAction();
 };
 
 async function viewRoles() {
     // Select so user sees role id, job title, department the role belongs to, and salary for that role
-    const roles = await db.query('SELECT * FROM roles');
+    const roles = await db.query('SELECT roles.id, title, salary, name AS department FROM roles JOIN departments ON roles.department_id = departments.id');
     console.table(roles);
     askForNextAction();
 };
