@@ -36,7 +36,7 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ## Usage
 
-Here is a quick [video](...) demonstration of this application's functionality and how to use it.
+Here is a quick [video](https://watch.screencastify.com/v/wOcHZCYeqk1WBIBs2CX5) demonstration of this application's functionality and how to use it.
 
 ## Technologies Used
 

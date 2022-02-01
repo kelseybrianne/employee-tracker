@@ -1,28 +1,25 @@
 // TO DO:
 // Get rid of string quotes in tables or ask if that's necessary
 // Make demo vid
-// Make README
+// add video to README
 
 const inquirer = require("inquirer");
-const mysql = require('mysql2');
 const db = require('./db/connection')
+const cTable = require('console.table');
 
 async function viewDepartments() {
-    // Select so user sees role id, job title, department the role belongs to, and salary for that role
     const departments = await db.query('SELECT id, name FROM departments');
     console.table(departments);
     askForNextAction();
 };
 
 async function viewRoles() {
-    // Select so user sees role id, job title, department the role belongs to, and salary for that role
     const roles = await db.query('SELECT roles.id, title, salary, name AS department FROM roles JOIN departments ON roles.department_id = departments.id');
     console.table(roles);
     askForNextAction();
 };
 
 async function viewEmployees() {
-    // Select so user sees id, first name, last name, job title, department, salary, and manager of that employee
     const employees = await db.query('SELECT employees.id, CONCAT(employees.first_name," ",employees.last_name) AS name, title AS job_title, salary, name AS department, CONCAT(manager.first_name," ",manager.last_name) AS manager FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments ON roles.department_id = departments.id JOIN employees manager ON manager.id = employees.manager_id');
     console.table(employees);
     askForNextAction();
@@ -48,7 +45,6 @@ async function addDepartment() {
     }
 };
 
-// Add a role
 async function addRole() {
     // SELECT the existing roles out of the 'roles' table
     const departments = await db.query('SELECT * FROM departments');
@@ -185,7 +181,6 @@ async function updateEmployeeRole() {
         const {employee_id, role_id} = answers;
         // Update employee role in database
         db.query('UPDATE employees SET role_id = ? WHERE id = ?', [role_id, employee_id])
-
         askForNextAction();
     }
     catch(err) {
